@@ -33,4 +33,5 @@ public interface EmployeeSkillService {
      * ✅ Lista todos los empleados que poseen una habilidad específica.
      */
     List<EmployeeSkillResponse> findEmployeesBySkill(Long skillId);
+    List<EmployeeSkillResponse> findAll();
 }

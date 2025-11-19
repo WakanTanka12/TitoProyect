@@ -21,7 +21,7 @@ export default function SkillForm() {
     const loadSkill = async () => {
         try {
             const res = await getSkillById(id);
-            setSkill(res.data);
+            setSkill(res.data.data || res.data);
         } catch {
             Swal.fire("Error", "Failed to load skill data", "error");
         }

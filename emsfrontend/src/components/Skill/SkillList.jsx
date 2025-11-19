@@ -15,7 +15,7 @@ export default function SkillList() {
     const loadSkills = async () => {
         try {
             const res = await getAllSkills();
-            setSkills(res.data);
+            setSkills(res.data.data || []);
         } catch {
             Swal.fire("Error", "Failed to load skills", "error");
         }

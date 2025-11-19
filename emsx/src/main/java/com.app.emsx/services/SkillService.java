@@ -12,3 +12,4 @@ public interface SkillService {
     SkillResponse findById(Long id);
     List<SkillResponse> findAll();
 }
+    

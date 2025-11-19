@@ -1,6 +1,7 @@
 package com.app.emsx.repositories;
 
 import com.app.emsx.entities.Employee;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,4 +16,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     // ✅ Cuenta empleados agrupados por departamento (para dashboard)
     @Query("SELECT e.department.name, COUNT(e) FROM Employee e GROUP BY e.department.name")
     List<Object[]> countEmployeesByDepartment();
+
+    @Override
+    @EntityGraph(attributePaths = {"department", "skills"})
+    List<Employee> findAll();
 }

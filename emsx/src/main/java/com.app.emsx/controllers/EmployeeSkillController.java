@@ -40,7 +40,12 @@ public class EmployeeSkillController {
      */
     @DeleteMapping("/remove")
     public ResponseEntity<ApiResponse<EmployeeSkillResponse>> removeSkill(
-            @Valid @RequestBody EmployeeSkillRequest request) {
+            @RequestParam Long employeeId,
+            @RequestParam Long skillId) {
+        EmployeeSkillRequest request = EmployeeSkillRequest.builder()
+                .employeeId(employeeId)
+                .skillId(skillId)
+                .build();
 
         EmployeeSkillResponse response = service.removeSkill(request);
         return ResponseEntity.ok(ApiResponse.ok("Habilidad eliminada correctamente", response));
@@ -66,5 +71,9 @@ public class EmployeeSkillController {
 
         List<EmployeeSkillResponse> list = service.findEmployeesBySkill(skillId);
         return ResponseEntity.ok(ApiResponse.ok("Empleados con esta habilidad", list));
+    }
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<EmployeeSkillResponse>>> findAll() {
+        return ResponseEntity.ok(ApiResponse.ok("Habilidades del empleado", service.findAll()));
     }
 }

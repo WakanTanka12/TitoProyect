@@ -99,4 +99,13 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
                 .map(employee -> mapper.toResponse(employee, skill, ""))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<EmployeeSkillResponse> findAll() {
+        // Recorremos todos los empleados y "aplanamos" sus skills en una sola lista de respuestas
+        return employeeRepository.findAll().stream()
+                .flatMap(employee -> employee.getSkills().stream()
+                        .map(skill -> mapper.toResponse(employee, skill, "")))
+                .collect(Collectors.toList());
+    }
 }

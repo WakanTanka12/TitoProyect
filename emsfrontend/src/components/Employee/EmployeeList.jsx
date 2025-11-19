@@ -16,7 +16,7 @@ const EmployeeList = () => {
     const loadEmployees = async () => {
         try {
             const res = await getAllEmployees();
-            setEmployees(res.data);
+            setEmployees(res.data.data || []);
         } catch (error) {
             console.error("Error loading employees:", error);
             Swal.fire("Error", "Failed to load employees", "error");

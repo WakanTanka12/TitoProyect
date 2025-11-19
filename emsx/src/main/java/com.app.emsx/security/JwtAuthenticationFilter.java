@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,46 +34,51 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String jwt;
         final String username;
 
-        // 🔍 Si no hay cabecera o no empieza con "Bearer ", continuar sin procesar
+        // 1. Si no hay token, continuar (Spring Security decidirá si rechaza o permite)
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 🧾 Extraer el token JWT (sin la palabra "Bearer ")
-        jwt = authHeader.substring(7);
+        try {
+            jwt = authHeader.substring(7);
 
-        // 👤 Extraer usuario desde el token
-        username = jwtService.extractUsername(jwt);
+            // 2. Intentamos extraer el usuario. Si expiro, AQUÍ lanza la excepción
+            username = jwtService.extractUsername(jwt);
 
-        // 🔐 Validar token si aún no hay autenticación en contexto
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            // ✅ Validar correctamente con el objeto UserDetails
-            if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
-
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                if (jwtService.isTokenValid(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+
+        } catch (Exception e) {
+            // ⚠️ CLAVE DE LA SOLUCIÓN:
+            // Si el token está vencido o malformado, NO lanzamos error ni respondemos 403 aquí.
+            // Simplemente no autenticamos al usuario (SecurityContext queda vacío)
+            // y dejamos que la petición siga su curso.
+            logger.warn("Token inválido o expirado: " + e.getMessage());
         }
 
-        // 🚀 Continuar con la cadena de filtros
+        // 3. Continuar con la cadena de filtros
+        // Si era /register (publica), pasará. Si era /employees (privada), Spring devolverá 403.
         filterChain.doFilter(request, response);
     }
 }

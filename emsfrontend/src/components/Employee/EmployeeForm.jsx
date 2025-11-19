@@ -37,7 +37,7 @@ const EmployeeForm = () => {
     const loadEmployee = async () => {
         try {
             const res = await getEmployeeById(id);
-            const data = res.data;
+            const data = res.data.data || res.data;
             setEmployee({
                 firstName: data.firstName,
                 lastName: data.lastName,
@@ -56,7 +56,7 @@ const EmployeeForm = () => {
     const loadDepartments = async () => {
         try {
             const res = await getAllDepartments();
-            setDepartments(res.data);
+            setDepartments(res.data.data || []);
         } catch (error) {
             console.error("Error loading departments:", error);
             Swal.fire("Error", "Failed to load departments", "error");
@@ -66,7 +66,7 @@ const EmployeeForm = () => {
     const loadSkills = async () => {
         try {
             const res = await getAllSkills();
-            setSkills(res.data);
+            setSkills(res.data.data || []);
         } catch (error) {
             console.error("Error loading skills:", error);
             Swal.fire("Error", "Failed to load skills", "error");

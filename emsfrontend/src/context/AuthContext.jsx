@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
 
             try {
                 // 🔑 Configurar encabezado Authorization global
-                api.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
+                // api.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
 
                 // 🧩 Si ya hay user en localStorage, úsalo directamente
                 if (storedUser) {
@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }) => {
     const login = (newToken, userData = null) => {
         try {
             localStorage.setItem("token", newToken);
-            api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+            // api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
             setToken(newToken);
 
             if (userData) {
@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }) => {
     const logout = (redirect = true) => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        delete api.defaults.headers.common["Authorization"];
+        // delete api.defaults.headers.common["Authorization"];
         setUser(null);
         setToken(null);
 

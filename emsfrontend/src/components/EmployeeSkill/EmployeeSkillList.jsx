@@ -15,7 +15,7 @@ export default function EmployeeSkillList() {
     const loadRelations = async () => {
         try {
             const res = await getAllEmployeeSkills();
-            setRelations(res.data);
+            setRelations(res.data.data || []);
         } catch {
             Swal.fire("Error", "Failed to load employee-skill relations", "error");
         }

@@ -31,7 +31,7 @@ export default function EmployeeSkillForm() {
     const loadEmployees = async () => {
         try {
             const res = await getAllEmployees();
-            setEmployees(res.data);
+            setEmployees(res.data.data || []);
         } catch {
             Swal.fire("Error", "Failed to load employees", "error");
         }
@@ -40,7 +40,7 @@ export default function EmployeeSkillForm() {
     const loadSkills = async () => {
         try {
             const res = await getAllSkills();
-            setSkills(res.data);
+            setSkills(res.data.data || []);
         } catch {
             Swal.fire("Error", "Failed to load skills", "error");
         }
@@ -133,7 +133,7 @@ export default function EmployeeSkillForm() {
 
                 <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || !relation.employeeId || !relation.skillId}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition flex items-center justify-center"
                 >
                     {loading ? (
