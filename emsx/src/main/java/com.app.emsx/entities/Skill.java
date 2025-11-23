@@ -34,8 +34,4 @@ public class Skill {
 
     @Size(max = 255)
     private String description;
-
-    // 🔁 Relación bidireccional con Employee (lado inverso)
-    @ManyToMany(mappedBy = "skills", fetch = FetchType.LAZY)
-    private Set<Employee> employees = new HashSet<>();
 }

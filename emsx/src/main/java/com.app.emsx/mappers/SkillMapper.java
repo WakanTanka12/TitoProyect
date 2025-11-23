@@ -27,16 +27,6 @@ public interface SkillMapper {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setDescription(entity.getDescription());
-        if (entity.getEmployees() != null) {
-            dto.setEmployeeNames(
-                    entity.getEmployees()
-                            .stream()
-                            .map(emp -> emp.getFirstName() + " " + emp.getLastName())
-                            .collect(Collectors.toList())
-            );
-        } else {
-            dto.setEmployeeNames(new ArrayList<>());
-        }
         return dto;
     }
 

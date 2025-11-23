@@ -25,6 +25,4 @@ public class SkillRequest {
     @Size(max = 255, message = "La descripción no puede superar los 255 caracteres.")
     private String description;
 
-    // ✅ IDs opcionales de empleados que poseen esta habilidad
-    private List<Long> employeeIds;
 }

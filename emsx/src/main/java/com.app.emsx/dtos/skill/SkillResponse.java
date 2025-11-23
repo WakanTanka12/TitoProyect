@@ -12,5 +12,4 @@ public class SkillResponse {
     private Long id;
     private String name;
     private String description;
-    private List<String> employeeNames; // ✅ Empleados que poseen esta habilidad
 }

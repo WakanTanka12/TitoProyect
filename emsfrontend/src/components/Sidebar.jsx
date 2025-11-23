@@ -7,7 +7,6 @@ export default function Sidebar() {
         { to: "/employees", label: "Employees", icon: <Users size={18} /> },
         { to: "/departments", label: "Departments", icon: <Briefcase size={18} /> },
         { to: "/skills", label: "Skills", icon: <Lightbulb size={18} /> },
-        { to: "/employee-skills", label: "Employee Skills", icon: <LinkIcon size={18} /> },
         { to: "/settings", label: "Settings", icon: <Settings size={18} /> },
     ];
 

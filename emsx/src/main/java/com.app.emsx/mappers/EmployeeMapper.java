@@ -3,6 +3,7 @@ package com.app.emsx.mappers;
 import com.app.emsx.dtos.employee.EmployeeRequest;
 import com.app.emsx.dtos.employee.EmployeeResponse;
 import com.app.emsx.entities.Employee;
+import com.app.emsx.entities.Skill;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -36,15 +37,7 @@ public interface EmployeeMapper {
         if (entity.getDepartment() != null) {
             dto.setDepartmentName(entity.getDepartment().getName());
         }
-        if (entity.getSkills() != null) {
-            dto.setSkillNames(
-                    entity.getSkills().stream()
-                            .map(skill -> skill.getName())
-                            .collect(Collectors.toList())
-            );
-        } else {
-            dto.setSkillNames(new ArrayList<>());
-        }
+
         return dto;
     }
 

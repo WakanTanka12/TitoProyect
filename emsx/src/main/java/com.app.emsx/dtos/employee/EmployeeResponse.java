@@ -17,5 +17,4 @@ public class EmployeeResponse {
     private String phone;
 
     private String departmentName; // ✅ Nombre del departamento
-    private List<String> skillNames; // ✅ Habilidades del empleado
 }

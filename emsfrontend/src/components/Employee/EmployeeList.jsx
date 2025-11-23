@@ -75,7 +75,6 @@ const EmployeeList = () => {
                         <th className="p-3">Name</th>
                         <th className="p-3">Email</th>
                         <th className="p-3">Department</th>
-                        <th className="p-3">Skills</th>
                         <th className="p-3 text-center">Actions</th>
                     </tr>
                     </thead>
@@ -89,23 +88,26 @@ const EmployeeList = () => {
                                 }`}
                             >
                                 <td className="p-3 font-medium text-gray-700">{i + 1}</td>
-                                <td className="p-3 flex items-center gap-2 text-gray-800 font-semibold">
-                    <span className="bg-blue-100 text-blue-700 w-8 h-8 flex items-center justify-center rounded-full font-bold">
-                      {e.firstName?.charAt(0).toUpperCase() || "?"}
-                    </span>
-                                    {e.firstName} {e.lastName}
+                                <td className="p-3 text-gray-800 font-semibold">
+                                    <div className="flex item-center gap-2">
+                                        <span className="bg-blue-100 text-blue-700 w-8 h-8 flex items-center justify-center rounded-full font-bold">
+                                            {e.firstName?.charAt(0).toUpperCase() || "?"}
+                                        </span>
+                                        {e.firstName} {e.lastName}
+                                    </div>
                                 </td>
-                                <td className="p-3 text-gray-600 flex items-center gap-1">
-                                    <Mail size={14} className="text-gray-400" /> {e.email}
+                                <td className="p-3 text-gray-600">
+                                    <div className="flex item-center gap-1">
+                                        <Mail size={14} className="text-gray-400" /> {e.email}
+                                    </div>
                                 </td>
-                                <td className="p-3 text-gray-600 flex items-center gap-1">
-                                    <Building2 size={14} className="text-gray-400" />{" "}
-                                    {e.departmentName || "—"}
+                                <td className="p-3 text-gray-600">
+                                    <div className= "flex items-center gap-1">
+                                        <Building2 size={14} className="text-gray-400" />{" "}
+                                        {e.departmentName || "—"}
+                                    </div>
                                 </td>
-                                <td className="p-3 text-gray-600 flex items-center gap-1">
-                                    <Award size={14} className="text-gray-400" />{" "}
-                                    {e.skillNames?.length ? e.skillNames.join(", ") : "—"}
-                                </td>
+
                                 <td className="p-3 text-center">
                                     <div className="flex justify-center gap-2">
                                         <Link
@@ -128,7 +130,7 @@ const EmployeeList = () => {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="6" className="text-center py-8 text-gray-500 italic">
+                            <td colSpan="5" className="text-center py-8 text-gray-500 italic">
                                 No employees found.
                             </td>
                         </tr>

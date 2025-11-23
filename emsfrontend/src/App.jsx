@@ -18,7 +18,6 @@ import DepartmentPage from "./pages/DepartmentPage";
 import EmployeePage from "./pages/EmployeePage";
 import SkillPage from "./pages/SkillPage";
 import DependentPage from "./pages/DependentPage";
-import EmployeeSkillPage from "./pages/EmployeeSkillPage";
 
 import "./index.css";
 
@@ -53,7 +52,7 @@ export default function App() {
                             <Route path="employees/*" element={<EmployeePage />} />
                             <Route path="skills/*" element={<SkillPage />} />
                             <Route path="dependents/*" element={<DependentPage />} />
-                            <Route path="employee-skills/*" element={<EmployeeSkillPage />} />
+                            <Route path="settings" element={<div>Settings Page placeholder</div>}></Route>
                         </Route>
 
                         {/* 🚦 Redirección general */}

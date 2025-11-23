@@ -20,8 +20,6 @@ const EmployeeForm = () => {
         departmentId: "",
     });
 
-    const [skills, setSkills] = useState([]);
-    const [selectedSkills, setSelectedSkills] = useState([]);
     const [departments, setDepartments] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -30,7 +28,6 @@ const EmployeeForm = () => {
 
     useEffect(() => {
         loadDepartments();
-        loadSkills();
         if (id) loadEmployee();
     }, [id]);
 
@@ -63,28 +60,11 @@ const EmployeeForm = () => {
         }
     };
 
-    const loadSkills = async () => {
-        try {
-            const res = await getAllSkills();
-            setSkills(res.data.data || []);
-        } catch (error) {
-            console.error("Error loading skills:", error);
-            Swal.fire("Error", "Failed to load skills", "error");
-        }
-    };
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setEmployee({ ...employee, [name]: value });
     };
 
-    const handleSkillToggle = (skillId) => {
-        setSelectedSkills((prev) =>
-            prev.includes(skillId)
-                ? prev.filter((id) => id !== skillId)
-                : [...prev, skillId]
-        );
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -93,7 +73,6 @@ const EmployeeForm = () => {
         const payload = {
             ...employee,
             departmentId: Number(employee.departmentId),
-            skillIds: selectedSkills.map((id) => Number(id)),
         };
 
         try {
@@ -193,29 +172,6 @@ const EmployeeForm = () => {
                         </option>
                     ))}
                 </select>
-
-                {/* Skills */}
-                <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Skills
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                        {skills.map((skill) => (
-                            <button
-                                key={skill.id}
-                                type="button"
-                                onClick={() => handleSkillToggle(skill.id)}
-                                className={`px-3 py-1 text-sm rounded-full border transition ${
-                                    selectedSkills.includes(skill.id)
-                                        ? "bg-blue-600 text-white border-blue-600"
-                                        : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"
-                                }`}
-                            >
-                                {skill.name}
-                            </button>
-                        ))}
-                    </div>
-                </div>
 
                 {/* Save Button */}
                 <button

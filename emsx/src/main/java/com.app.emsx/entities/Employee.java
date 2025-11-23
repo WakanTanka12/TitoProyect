@@ -47,12 +47,4 @@ public class Employee {
     @JoinColumn(name = "employee_id")
     private List<Dependent> dependents = new ArrayList<>();
 
-    // 🔁 Habilidades (N:N)
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "employee_skills",
-            joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "skill_id")
-    )
-    private Set<Skill> skills = new HashSet<>();
 }

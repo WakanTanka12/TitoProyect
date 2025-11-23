@@ -46,16 +46,6 @@ public class SkillServiceImpl implements SkillService {
 
         Skill skill = mapper.toEntity(request);
 
-        // Si se envían IDs de empleados, los vinculamos
-        if (request.getEmployeeIds() != null && !request.getEmployeeIds().isEmpty()) {
-            Set<Employee> employees = new HashSet<>();
-            for (Long empId : request.getEmployeeIds()) {
-                Employee employee = employeeRepository.findById(empId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado con ID: " + empId));
-                employees.add(employee);
-            }
-            skill.setEmployees(employees);
-        }
 
         return mapper.toResponse(repository.save(skill));
     }
@@ -74,17 +64,6 @@ public class SkillServiceImpl implements SkillService {
         }
 
         mapper.updateEntityFromRequest(request, skill);
-
-        // Reasignar empleados si se envían nuevos IDs
-        if (request.getEmployeeIds() != null) {
-            Set<Employee> employees = new HashSet<>();
-            for (Long empId : request.getEmployeeIds()) {
-                Employee employee = employeeRepository.findById(empId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado con ID: " + empId));
-                employees.add(employee);
-            }
-            skill.setEmployees(employees);
-        }
 
         return mapper.toResponse(repository.save(skill));
     }
@@ -118,10 +97,6 @@ public class SkillServiceImpl implements SkillService {
     public void delete(Long id) {
         Skill skill = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Habilidad no encontrada con ID: " + id));
-
-        if (skill.getEmployees() != null && !skill.getEmployees().isEmpty()) {
-            throw new BusinessRuleException("No se puede eliminar una habilidad que está asignada a empleados.");
-        }
 
         repository.delete(skill);
     }

@@ -13,5 +13,4 @@ export const deleteEmployee = (id) => api.delete(`${API_URL}/${id}`);
 
 // Related data
 export const getAllDepartments = () => api.get(DEPT_URL);
-export const getAllSkills = () => api.get(SKILL_URL);
 export const getDependentsByEmployee = (id) => api.get(`${DEPENDENT_URL}/byEmployee/${id}`);
