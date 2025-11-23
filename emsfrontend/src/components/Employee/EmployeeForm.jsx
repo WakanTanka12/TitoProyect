@@ -5,8 +5,7 @@ import {
     createEmployee,
     updateEmployee,
     getEmployeeById,
-    getAllDepartments,
-    getAllSkills,
+    getAllDepartments
 } from "../../services/EmployeeService";
 import { Save, ArrowLeft, Loader2 } from "lucide-react";
 

@@ -18,6 +18,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Object[]> countEmployeesByDepartment();
 
     @Override
-    @EntityGraph(attributePaths = {"department", "skills"})
+    @EntityGraph(attributePaths = {"department"})
     List<Employee> findAll();
 }

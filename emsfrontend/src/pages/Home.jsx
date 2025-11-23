@@ -12,14 +12,6 @@ import {
 } from "recharts";
 import { Users, Briefcase, Award, UserPlus } from "lucide-react";
 
-/**
- * 🏠 Home Page (Dashboard)
- * -----------------------------------------------------
- * ✔ Muestra saludo personalizado según usuario autenticado
- * ✔ Carga métricas globales (empleados, departamentos, skills, dependientes)
- * ✔ Renderiza gráfico de empleados por departamento
- * ✔ Soporta respuesta paginada del backend
- */
 export default function Home() {
     const { user, loading } = useAuth();
 
@@ -47,22 +39,13 @@ export default function Home() {
                 api.get("/dependents"),
             ]);
 
-            // 🧠 Normalizar estructura de respuesta (paginada o lista)
-            const departments = Array.isArray(depRes.data)
-                ? depRes.data
-                : depRes.data.content || depRes.data.departments || [];
+            // ✅ CORRECCIÓN: Leer .data.data en lugar de .data.content
+            // La respuesta de Axios es 'res.data', y dentro viene su ApiResponse con otro campo 'data'
 
-            const employees = Array.isArray(empRes.data)
-                ? empRes.data
-                : empRes.data.content || [];
-
-            const skills = Array.isArray(skillRes.data)
-                ? skillRes.data
-                : skillRes.data.content || [];
-
-            const dependents = Array.isArray(depdRes.data)
-                ? depdRes.data
-                : depdRes.data.content || [];
+            const departments = depRes.data.data || [];
+            const employees = empRes.data.data || [];
+            const skills = skillRes.data.data || [];
+            const dependents = depdRes.data.data || [];
 
             // ✅ Contadores globales
             setStats({
@@ -76,7 +59,7 @@ export default function Home() {
             const departmentStats = departments.map((dept) => ({
                 name: dept.name || dept.department_name || "N/A",
                 employees: employees.filter(
-                    (emp) => emp.department?.id === dept.id
+                    (emp) => emp.departmentName === dept.name // Ajuste: comparar nombres o IDs según su DTO
                 ).length,
             }));
 
@@ -88,30 +71,9 @@ export default function Home() {
         }
     };
 
-    // ⏳ Pantalla mientras se carga usuario o datos
     if (loading || fetching) {
         return (
             <div className="flex flex-col items-center justify-center h-[80vh] text-gray-600">
-                <svg
-                    className="animate-spin h-10 w-10 text-blue-500 mb-3"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                >
-                    <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                    ></circle>
-                    <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v8H4z"
-                    ></path>
-                </svg>
                 <p className="text-lg font-medium">Cargando tu panel...</p>
             </div>
         );
@@ -155,7 +117,6 @@ export default function Home() {
 
     return (
         <div className="space-y-6">
-            {/* 🔹 SALUDO */}
             <div className="bg-white rounded-xl shadow p-6 flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-800">
@@ -168,7 +129,6 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* 🔹 TARJETAS DE MÉTRICAS */}
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
                 {cards.map((card) => (
                     <div
@@ -188,7 +148,6 @@ export default function Home() {
                 ))}
             </div>
 
-            {/* 🔹 GRÁFICO DE EMPLEADOS POR DEPARTAMENTO */}
             <div className="bg-white rounded-xl shadow p-6">
                 <h2 className="text-lg font-semibold text-gray-800 mb-4">
                     Employees by Department
